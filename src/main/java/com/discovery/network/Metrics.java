@@ -1,11 +1,28 @@
 package com.discovery.network;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity // This tells Hibernate to make a table out of this class
 public class Metrics {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private long id;
 	private String name;
 	private long createdTimestamp;
 	private long operationStartedTimestamp;
 	private long operationFinishedTimestamp;
 	private long totalTime;
+	private String operationResult;
+	
+	public Metrics(){
+		this.name = "";
+		this.operationResult = "NOT_SET";
+		this.createdTimestamp = System.currentTimeMillis();
+	}
 	
 	public Metrics(String name){
 		this.name = name;
@@ -26,9 +43,16 @@ public class Metrics {
 		this.updateTotalTime();
 	}
 	
+	public synchronized long getId() {
+		return id;
+	}
 	
 	public synchronized String getName() {
 		return name;
+	}
+	
+	public synchronized void setId(Integer id) {
+		this.id = id;
 	}
 
 	public synchronized void setName(String name) {
@@ -65,6 +89,14 @@ public class Metrics {
 
 	public synchronized void setTotalTime(long totalTime) {
 		this.totalTime = totalTime;
+	}
+
+	public synchronized String getOperationResult() {
+		return operationResult;
+	}
+
+	public synchronized void setOperationResult(String operationResult) {
+		this.operationResult = operationResult;
 	}
 
 }
